@@ -13,7 +13,6 @@
         android:id="@+id/alpha_iv_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
         android:contentDescription="@null"
         android:src="@drawable/alpha_ic_ok"/>
 
@@ -21,6 +20,7 @@
         android:id="@+id/alpha_tv_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:maxWidth="100dp"
         android:minWidth="80dp"

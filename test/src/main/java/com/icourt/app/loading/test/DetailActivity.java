@@ -21,7 +21,6 @@ public class DetailActivity extends AppCompatActivity {
         final AlphaLoading alphaLoading = new AlphaLoading.Builder(this)
                 .message("我在加载...")
                 .cancelable(true)
-                .messageVisible(true)
                 .resultDuration(3000)
 //                .loadDrawable(R.drawable.ic_launcher_background)
                 .okIcon(R.drawable.ic_launcher_background)

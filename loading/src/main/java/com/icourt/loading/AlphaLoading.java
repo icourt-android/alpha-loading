@@ -14,6 +14,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -45,6 +46,8 @@ public class AlphaLoading {
     private final ImageView mIconView;
     private final TextView mMsgView;
     private Handler mHandler;
+    @DrawableRes
+    private final int mLoadDrawable;
     @State
     private int mState;
 
@@ -66,15 +69,11 @@ public class AlphaLoading {
         this.mIconView = iconView;
         this.mMsgView = msgView;
 
-        if (!b.messageVisible) {
-            mMsgView.setVisibility(View.GONE);
-        }
-
-        iconView.setImageResource(b.loadDrawable);
-        msgView.setText(b.message);
+        setMessage(b.message);
+        iconView.setImageResource(mLoadDrawable = b.loadDrawable);
 
         dialog.setCancelable(b.cancelable);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(b.cancelable);
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -109,7 +108,13 @@ public class AlphaLoading {
      */
     public void setMessage(String message) {
         Log.d(TAG, "setMessage() called with: message = [" + message + "]");
-        mMsgView.setText(message);
+        if (TextUtils.isEmpty(message)) {
+            mMsgView.setVisibility(View.GONE);
+            mMsgView.setText(null);
+        } else {
+            mMsgView.setVisibility(View.VISIBLE);
+            mMsgView.setText(message);
+        }
     }
 
     /**
@@ -123,6 +128,7 @@ public class AlphaLoading {
             mState = STATE_LOADING;
 
             mDialog.show();
+            mIconView.setImageResource(mLoadDrawable);
             startLoadingAnimation();
 
             if (mHandler == null) {
@@ -240,7 +246,6 @@ public class AlphaLoading {
         private String message;
         private boolean cancelable;
         private long resultDuration;
-        private boolean messageVisible;
         private int okIcon, failIcon;
         private int loadDrawable;
 
@@ -248,7 +253,6 @@ public class AlphaLoading {
             this.context = context;
             this.cancelable = false;
             this.resultDuration = 1000;
-            this.messageVisible = true;
             this.okIcon = -1;
             this.failIcon = -1;
             this.loadDrawable = -1;
@@ -268,14 +272,6 @@ public class AlphaLoading {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-            return this;
-        }
-
-        /**
-         * @param visible 消息部分是否可见，默认可见
-         */
-        public Builder messageVisible(boolean visible) {
-            this.messageVisible = visible;
             return this;
         }
 
