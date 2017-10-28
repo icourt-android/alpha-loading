@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -19,6 +20,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * @author Junkang.Ding dingjunkang@icourt.cc
@@ -32,15 +36,16 @@ public class AlphaLoading {
 
     private static final String TAG = "AlphaLoading";
 
-    private static final int STATE_INIT = 0;
-    private static final int STATE_LOADING = 1;
-    private static final int STATE_RESULTING = 2;
-    private static final int STATE_DEAD = 3;
+    public static final int STATE_INIT = 0;
+    public static final int STATE_LOADING = 1;
+    public static final int STATE_RESULTING = 2;
+    public static final int STATE_DEAD = 3;
 
     private final Dialog mDialog;
     private final ImageView mIconView;
     private final TextView mMsgView;
     private Handler mHandler;
+    @State
     private int mState;
 
     private final long mResultDuration;
@@ -220,8 +225,13 @@ public class AlphaLoading {
         } else if (mState == STATE_RESULTING) {
             mIconView.animate().cancel();
         }
-        mState = STATE_DEAD;
+        // mState = STATE_DEAD;
+        mState = STATE_INIT;
+    }
 
+    @State
+    public int getState() {
+        return mState;
     }
 
     public static class Builder {
@@ -326,6 +336,12 @@ public class AlphaLoading {
             }
             return null;
         }
+    }
+
+
+    @IntDef({STATE_INIT, STATE_LOADING, STATE_RESULTING, STATE_DEAD})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface State {
     }
 
 }

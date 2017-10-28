@@ -1,6 +1,5 @@
 package com.icourt.app.loading.test;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +10,7 @@ import com.icourt.loading.AlphaLoading;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,27 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    private AlphaLoading alphaLoading;
+    private Handler handler;
+
     public void onClick2(View view) {
-        startActivity(new Intent(this, DetailActivity.class));
+
+        if (alphaLoading == null) {
+            alphaLoading = new AlphaLoading.Builder(this)
+                    .message("我在加载...")
+                    .cancelable(true)
+                    .resultDuration(1000)
+                    .create();
+            handler = new Handler();
+        }
+        alphaLoading.show();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alphaLoading.dismissImmediately();
+            }
+        }, 2000);
+
+//        startActivity(new Intent(this, DetailActivity.class));
     }
 }

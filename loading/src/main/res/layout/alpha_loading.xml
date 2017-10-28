@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@drawable/alpha_progress_bg"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp"
-    tools:background="#666">
-    <!--android:background="@drawable/alpha_progress_bg"-->
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/alpha_iv_icon"
@@ -22,7 +21,6 @@
         android:id="@+id/alpha_tv_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/alpha_progress_message_bg"
         android:gravity="center"
         android:maxWidth="100dp"
         android:minWidth="80dp"
@@ -30,7 +28,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="4dp"
-        android:textColor="#FF444444"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         tools:text="LOADING..."/>
 </LinearLayout>
