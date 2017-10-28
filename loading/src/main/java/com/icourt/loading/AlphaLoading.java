@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -37,10 +36,9 @@ public class AlphaLoading {
 
     private static final String TAG = "AlphaLoading";
 
-    public static final int STATE_INIT = 0;
+    public static final int STATE_FREE = 0;
     public static final int STATE_LOADING = 1;
     public static final int STATE_RESULTING = 2;
-    public static final int STATE_DEAD = 3;
 
     private final Dialog mDialog;
     private final ImageView mIconView;
@@ -56,7 +54,7 @@ public class AlphaLoading {
     private final int mFailDrawableRes;
 
     private AlphaLoading(Builder b) {
-        mState = STATE_INIT;
+        mState = STATE_FREE;
 
         mOkDrawableRes = b.okIcon;
         mFailDrawableRes = b.failIcon;
@@ -77,15 +75,13 @@ public class AlphaLoading {
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                Log.d(TAG, "onCancel() called with: dialog = [" + dialog + "]");
-                destroy();
+                release();
             }
         });
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Log.d(TAG, "onDismiss() called with: dialog = [" + dialog + "]");
-                destroy();
+                release();
             }
         });
 
@@ -107,7 +103,6 @@ public class AlphaLoading {
      * @param message 消息
      */
     public void setMessage(String message) {
-        Log.d(TAG, "setMessage() called with: message = [" + message + "]");
         if (TextUtils.isEmpty(message)) {
             mMsgView.setVisibility(View.GONE);
             mMsgView.setText(null);
@@ -121,9 +116,7 @@ public class AlphaLoading {
      * 显示loading
      */
     public void show() {
-        if (mState == STATE_INIT) {
-
-            Log.d(TAG, "show: state init");
+        if (mState == STATE_FREE) {
 
             mState = STATE_LOADING;
 
@@ -134,9 +127,6 @@ public class AlphaLoading {
             if (mHandler == null) {
                 mHandler = new Handler(Looper.getMainLooper());
             }
-
-        } else {
-            Log.d(TAG, "show: state  = " + mState);
         }
     }
 
@@ -146,14 +136,9 @@ public class AlphaLoading {
     public void dismissImmediately() {
         if (mState == STATE_LOADING) {
 
-            Log.d(TAG, "dismissImmediately: state loading");
-
-            mState = STATE_DEAD;
-
             mDialog.dismiss();
+            release();
             stopLoadingAnimation();
-        } else {
-            Log.d(TAG, "dismissImmediately: state = " + mState);
         }
     }
 
@@ -163,18 +148,15 @@ public class AlphaLoading {
      * @param okMsg 结束消息
      */
     public void dismissOk(String okMsg) {
-        Log.d(TAG, "dismissOk() called with: okMsg = [" + okMsg + "]");
         dismissWithResult(okMsg, mOkDrawableRes);
     }
 
     public void dismissFail(String failMsg) {
-        Log.d(TAG, "dismissFail() called with: failMsg = [" + failMsg + "]");
         dismissWithResult(failMsg, mFailDrawableRes);
     }
 
     private void dismissWithResult(String msg, @DrawableRes final int resultIconRes) {
         if (mState == STATE_LOADING) {
-            Log.d(TAG, "dismissWithResult state loading");
             mState = STATE_RESULTING;
             setMessage(msg);
             mIconView.animate().alpha(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
@@ -190,13 +172,10 @@ public class AlphaLoading {
                     @Override
                     public void run() {
                         mDialog.dismiss();
-                        mState = STATE_DEAD;
-                        Log.d(TAG, "dead: ");
+                        release();
                     }
                 }, 200 + mResultDuration);
             }
-        } else {
-            Log.d(TAG, "dismissWithResult state = " + mState);
         }
     }
 
@@ -218,8 +197,10 @@ public class AlphaLoading {
         }
     }
 
-    private void destroy() {
-        Log.d(TAG, "destroy() called");
+    private void release() {
+        if (mState == STATE_FREE) {
+            return;
+        }
 
         if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
@@ -231,13 +212,16 @@ public class AlphaLoading {
         } else if (mState == STATE_RESULTING) {
             mIconView.animate().cancel();
         }
-        // mState = STATE_DEAD;
-        mState = STATE_INIT;
+        mState = STATE_FREE;
     }
 
     @State
     public int getState() {
         return mState;
+    }
+
+    public boolean isFree() {
+        return STATE_FREE == mState;
     }
 
     public static class Builder {
@@ -335,7 +319,7 @@ public class AlphaLoading {
     }
 
 
-    @IntDef({STATE_INIT, STATE_LOADING, STATE_RESULTING, STATE_DEAD})
+    @IntDef({STATE_FREE, STATE_LOADING, STATE_RESULTING})
     @Retention(RetentionPolicy.SOURCE)
     public @interface State {
     }

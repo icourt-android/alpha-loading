@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         if (alphaLoading == null) {
             alphaLoading = new AlphaLoading.Builder(this)
 //                    .message("我在加载...")
-                    .cancelable(false)
+                    .cancelable(true)
                     .resultDuration(1000)
                     .create();
             handler = new Handler();
@@ -105,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                alphaLoading.dismissOk("w我爱你爱滴阿森纳从 i 问佛 in");
+//                alphaLoading.dismissOk("w我爱你爱滴阿森纳从 i 问佛 in");
+                alphaLoading.dismissImmediately();
+                alphaLoading.dismissOk("ok");
+                alphaLoading.show();
             }
         }, 2000);
 
