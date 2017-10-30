@@ -30,7 +30,7 @@ loading.dismissWithResult("some msg", R.drawable.some_icon);    // 显示自定�
 
 ```
 
-全局默认值(只能设置一次)，建议在application初始化的时候设置
+全局默认值，建议在application初始化的时候设置
 ```
 AlphaLoading.setDefaultLoadingDrawable(R.drawable.ani_default_loading);
 AlphaLoading.setDefaultOkIcon(R.drawable.icon_default_ok);
