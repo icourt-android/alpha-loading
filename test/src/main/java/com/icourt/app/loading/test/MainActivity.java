@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AlphaLoading.setDefaultOkIcon(R.drawable.ic_launcher_background);
     }
 
     public void onClick(View view) {
@@ -92,11 +94,10 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
 
     public void onClick2(View view) {
-
         if (alphaLoading == null) {
             alphaLoading = new AlphaLoading.Builder(this)
-//                    .message("我在加载...")
-                    .cancelable(true)
+                    .message("正在压缩...")
+                    .cancelable(false)
                     .resultDuration(1000)
                     .create();
             handler = new Handler();
@@ -105,13 +106,14 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-//                alphaLoading.dismissOk("w我爱你爱滴阿森纳从 i 问佛 in");
-                alphaLoading.dismissImmediately();
-                alphaLoading.dismissOk("ok");
-                alphaLoading.show();
+                alphaLoading.setMessage("正在上传...");
+            }
+        }, 1000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alphaLoading.dismissOk("成功");
             }
         }, 2000);
-
-//        startActivity(new Intent(this, DetailActivity.class));
     }
 }

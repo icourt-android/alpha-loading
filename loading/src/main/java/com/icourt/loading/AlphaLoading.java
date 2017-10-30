@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.view.View;
@@ -40,18 +39,49 @@ public class AlphaLoading {
     public static final int STATE_LOADING = 1;
     public static final int STATE_RESULTING = 2;
 
+    private static int sDefaultLoadingDrawable = R.drawable.alpha_loading;
+    private static int sDefaultOkIcon = R.drawable.alpha_ic_ok;
+    private static int sDefaultFailIcon = R.drawable.alpha_ic_fail;
+    private static boolean sDefaultCancelable = false;
+    private static long sDefaultResultDuration = 1000;
+
     private final Dialog mDialog;
     private final ImageView mIconView;
     private final TextView mMsgView;
     private Handler mHandler;
-    @DrawableRes
-    private final int mLoadDrawable;
     @State
     private int mState;
-
-    private final long mResultDuration;
+    @DrawableRes
+    private final int mLoadingDrawable;
+    @DrawableRes
     private final int mOkDrawableRes;
+    @DrawableRes
     private final int mFailDrawableRes;
+    private final long mResultDuration;
+
+    public static void setDefaultLoadingDrawable(@DrawableRes int defaultLoadingDrawable) {
+        sDefaultLoadingDrawable = defaultLoadingDrawable;
+    }
+
+    public static void setDefaultOkIcon(@DrawableRes int defaultOkIcon) {
+        sDefaultOkIcon = defaultOkIcon;
+    }
+
+    public static void setDefaultFailIcon(@DrawableRes int defaultFailIcon) {
+        sDefaultFailIcon = defaultFailIcon;
+    }
+
+    public static void setDefaultCancelable(boolean defaultCancelable) {
+        sDefaultCancelable = defaultCancelable;
+    }
+
+    public static void setDefaultResultDuration(long defaultResultDuration) {
+        if (defaultResultDuration >= 0) {
+            sDefaultResultDuration = defaultResultDuration;
+        } else {
+            sDefaultResultDuration = 1000;
+        }
+    }
 
     private AlphaLoading(Builder b) {
         mState = STATE_FREE;
@@ -68,7 +98,7 @@ public class AlphaLoading {
         this.mMsgView = msgView;
 
         setMessage(b.message);
-        iconView.setImageResource(mLoadDrawable = b.loadDrawable);
+        iconView.setImageResource(mLoadingDrawable = b.loadingDrawable);
 
         dialog.setCancelable(b.cancelable);
         dialog.setCanceledOnTouchOutside(b.cancelable);
@@ -121,7 +151,7 @@ public class AlphaLoading {
             mState = STATE_LOADING;
 
             mDialog.show();
-            mIconView.setImageResource(mLoadDrawable);
+            mIconView.setImageResource(mLoadingDrawable);
             startLoadingAnimation();
 
             if (mHandler == null) {
@@ -155,7 +185,7 @@ public class AlphaLoading {
         dismissWithResult(failMsg, mFailDrawableRes);
     }
 
-    private void dismissWithResult(String msg, @DrawableRes final int resultIconRes) {
+    public void dismissWithResult(String msg, @DrawableRes final int resultIconRes) {
         if (mState == STATE_LOADING) {
             mState = STATE_RESULTING;
             setMessage(msg);
@@ -231,15 +261,15 @@ public class AlphaLoading {
         private boolean cancelable;
         private long resultDuration;
         private int okIcon, failIcon;
-        private int loadDrawable;
+        private int loadingDrawable;
 
         public Builder(@NonNull Context context) {
             this.context = context;
-            this.cancelable = false;
-            this.resultDuration = 1000;
-            this.okIcon = -1;
-            this.failIcon = -1;
-            this.loadDrawable = -1;
+            this.cancelable = sDefaultCancelable;
+            this.resultDuration = sDefaultResultDuration;
+            this.okIcon = sDefaultOkIcon;
+            this.failIcon = sDefaultFailIcon;
+            this.loadingDrawable = sDefaultLoadingDrawable;
         }
 
         /**
@@ -271,7 +301,11 @@ public class AlphaLoading {
          * @param resultDuration 结果动画的时常, 负数和默认都是1000
          */
         public Builder resultDuration(long resultDuration) {
-            this.resultDuration = resultDuration;
+            if (resultDuration >= 0) {
+                this.resultDuration = resultDuration;
+            } else {
+                this.resultDuration = sDefaultResultDuration;
+            }
             return this;
         }
 
@@ -285,36 +319,13 @@ public class AlphaLoading {
             return this;
         }
 
-        public Builder loadDrawable(@DrawableRes int drawableRes) {
-            this.loadDrawable = drawableRes;
+        public Builder loadingDrawable(@DrawableRes int drawableRes) {
+            this.loadingDrawable = drawableRes;
             return this;
         }
 
         public AlphaLoading create() {
-            if (resultDuration < 0) {
-                resultDuration = 1000;
-            }
-            if (okIcon == -1) {
-                okIcon = R.drawable.alpha_ic_ok;
-            }
-            if (failIcon == -1) {
-                failIcon = R.drawable.alpha_ic_err;
-            }
-            if (loadDrawable == -1) {
-                loadDrawable = R.drawable.alpha_loading;
-            }
-
             return new AlphaLoading(this);
-        }
-
-        @Nullable
-        private Drawable getDrawable(@DrawableRes int drawableRes) {
-            try {
-                return context.getResources().getDrawable(drawableRes);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-            return null;
         }
     }
 
