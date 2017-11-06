@@ -3,9 +3,10 @@
 
 效果图
 
-![image](https://im.ezgif.com/tmp/ezgif-1-628474935d.gif)
+![image](https://github.com/icourt-android/alpha-loading/raw/master/snapshot/loading.gif)
 
 #####AlphaLoading: loading对话框，可以设置自定义加载动画，失败成功图标，以及提示消息
+
 Usage:
 ```
 AlphaLoading loading = new AlphaLoading.Builder(context)
@@ -40,7 +41,8 @@ AlphaLoading.setDefaultCancelable(true);
 AlphaLoading.setDefaultResultDuration(1000);    // >= 0
 ```
 
-#####AlphaLoadingView: Loading视图
+#####AlphaLoadingView: Loading视图 
+
 Usage:
 ```
 <com.icourt.app.loading.AlphaLoadingView
