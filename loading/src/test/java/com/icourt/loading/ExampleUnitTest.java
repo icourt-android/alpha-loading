@@ -2,6 +2,9 @@ package com.icourt.loading;
 
 import org.junit.Test;
 
+import java.io.File;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 /**
@@ -12,6 +15,12 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+
+//        File[] listFiles = new File("loading/libs").listFiles();
+//        for (File file : listFiles) {
+//            String replace = file.getName().replace("loading", "alpha_loading_");
+//            file.renameTo(new File(file.getParent(), replace));
+//        }
+
     }
 }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.icourt.loading.AlphaLoading;
+import com.icourt.loading.AlphaLoadingView;
 
 import java.util.Random;
 
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AlphaLoading.setDefaultOkIcon(R.drawable.ic_launcher_background);
+//        AlphaLoading.setDefaultOkIcon(R.drawable.ic_launcher_background);
     }
 
     public void onClick(View view) {
@@ -96,17 +97,18 @@ public class MainActivity extends AppCompatActivity {
     public void onClick2(View view) {
         if (alphaLoading == null) {
             alphaLoading = new AlphaLoading.Builder(this)
-                    .message("正在压缩...")
+//                    .message("正在压缩")
                     .cancelable(false)
                     .resultDuration(1000)
                     .create();
             handler = new Handler();
         }
+        alphaLoading.setMessage("正在压缩");
         alphaLoading.show();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                alphaLoading.setMessage("正在上传...");
+                alphaLoading.setMessage("正在上传");
             }
         }, 1000);
         handler.postDelayed(new Runnable() {
@@ -115,5 +117,17 @@ public class MainActivity extends AppCompatActivity {
                 alphaLoading.dismissOk("成功");
             }
         }, 2000);
+    }
+
+    private boolean flag;
+
+    public void onClickLoadingView(View view) {
+        AlphaLoadingView loadingView = (AlphaLoadingView) view;
+        if (!flag) {
+            loadingView.setImageResource(R.drawable.alpha_ic_fail);
+        } else {
+            loadingView.setImageDrawable(getResources().getDrawable(R.drawable.alpha_loading));
+        }
+        flag = !flag;
     }
 }
