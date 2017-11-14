@@ -90,7 +90,7 @@ public class AlphaLoading {
         mFailDrawableRes = b.failIcon;
 
         Dialog dialog = new Dialog(b.context, R.style.style_alpha_loading);
-        dialog.setContentView(R.layout.alpha_loading);
+        dialog.setContentView(R.layout.alpha_dialog_loading);
 
         ImageView iconView = (ImageView) dialog.findViewById(R.id.alpha_iv_icon);
         TextView msgView = (TextView) dialog.findViewById(R.id.alpha_tv_message);
