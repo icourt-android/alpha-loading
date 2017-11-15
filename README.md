@@ -9,15 +9,19 @@ gradle import:
 
 根项目build.gradle引入
 ```
-repositories {
-    maven {
-         url 'https://jitpack.io'
+allprojects {
+    repositories {
+        ...
+        maven {
+             url 'https://jitpack.io'
+        }
     }
 }
 ```
 目标项目build.gradle引入
 ```
 dependencies {
+    ...
     compile 'com.github.icourt-android:alpha-loading:0.9'
 }
 ```
