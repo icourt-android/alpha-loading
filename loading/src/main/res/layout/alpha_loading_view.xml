@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.icourt.loading.NestFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <android.support.v4.widget.Space
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="10" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.icourt.loading.AlphaLoadingView
-        android:id="@id/alpha_loading_view_iv"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_gravity="center_horizontal" />
+        <android.support.v4.widget.Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10" />
 
-    <android.support.v4.widget.Space
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="23" />
-</LinearLayout>
+        <com.icourt.loading.AlphaLoadingView
+            android:id="@id/alpha_loading_view_iv"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:layout_gravity="center_horizontal" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="23" />
+    </LinearLayout>
+</com.icourt.loading.NestFrameLayout>
