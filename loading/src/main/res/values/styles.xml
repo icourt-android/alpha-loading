@@ -19,4 +19,9 @@
         <item name="asv_viewState">content</item>
         <item name="asv_animateViewChanges">true</item>
     </style>
+
+    <!-- alpha空布局简单样式 -->
+    <style name="style_alpha_state_simple" parent="style_alpha_state">
+        <item name="asv_emptyView">@layout/alpha_empty_simple_view</item>
+    </style>
 </resources>
