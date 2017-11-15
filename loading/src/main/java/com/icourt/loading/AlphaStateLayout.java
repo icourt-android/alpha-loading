@@ -136,7 +136,7 @@ public class AlphaStateLayout extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (mContentView == null) {
-            throw new IllegalArgumentException("Content view is not defined");
+            return;
         }
         setView(VIEW_STATE_UNKNOWN);
     }
@@ -347,7 +347,7 @@ public class AlphaStateLayout extends FrameLayout {
         switch (mViewState) {
             case VIEW_STATE_LOADING:
                 if (mLoadingView == null) {
-                    throw new NullPointerException("Loading View");
+                    return;
                 }
 
                 if (mContentView != null) {
@@ -369,7 +369,7 @@ public class AlphaStateLayout extends FrameLayout {
 
             case VIEW_STATE_EMPTY:
                 if (mEmptyView == null) {
-                    throw new NullPointerException("Empty View");
+                    return;
                 }
 
 
@@ -392,7 +392,7 @@ public class AlphaStateLayout extends FrameLayout {
 
             case VIEW_STATE_ERROR:
                 if (mErrorView == null) {
-                    throw new NullPointerException("Error View");
+                    return;
                 }
 
 
@@ -416,8 +416,7 @@ public class AlphaStateLayout extends FrameLayout {
             case VIEW_STATE_CONTENT:
             default:
                 if (mContentView == null) {
-                    // Should never happen, the view should throw an exception if no content view is present upon creation
-                    throw new NullPointerException("Content View");
+                    return;
                 }
 
 
