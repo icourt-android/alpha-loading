@@ -250,15 +250,14 @@ public class AlphaStateLayout extends FrameLayout {
      * @param id
      * @return
      */
-    public boolean setEmptyText(@StringRes int id) {
+    public AlphaStateLayout setEmptyText(@StringRes int id) {
         if (mEmptyView != null) {
             TextView viewById = mEmptyView.findViewById(R.id.alpha_empty_view_tv);
             if (viewById != null) {
                 viewById.setText(id);
-                return true;
             }
         }
-        return false;
+        return this;
     }
 
     /**
@@ -267,15 +266,14 @@ public class AlphaStateLayout extends FrameLayout {
      * @param id
      * @return
      */
-    public boolean setEmptyText(@StringRes int id, Object... formatArgs) {
+    public AlphaStateLayout setEmptyText(@StringRes int id, Object... formatArgs) {
         if (mEmptyView != null) {
             TextView viewById = mEmptyView.findViewById(R.id.alpha_empty_view_tv);
             if (viewById != null) {
                 viewById.setText(getContext().getString(id, formatArgs));
-                return true;
             }
         }
-        return false;
+        return this;
     }
 
     /**
@@ -284,15 +282,14 @@ public class AlphaStateLayout extends FrameLayout {
      * @param id
      * @return
      */
-    public boolean setEmptyImage(@DrawableRes int id) {
+    public AlphaStateLayout setEmptyImage(@DrawableRes int id) {
         if (mEmptyView != null) {
             ImageView viewById = mEmptyView.findViewById(R.id.alpha_empty_view_iv);
             if (viewById != null) {
                 viewById.setImageResource(id);
-                return true;
             }
         }
-        return false;
+        return this;
     }
 
     /**
@@ -301,15 +298,14 @@ public class AlphaStateLayout extends FrameLayout {
      * @param charSequence
      * @return
      */
-    public boolean setErrorText(CharSequence charSequence) {
+    public AlphaStateLayout setErrorText(CharSequence charSequence) {
         if (mEmptyView != null) {
             TextView viewById = mEmptyView.findViewById(R.id.alpha_error_view_tv);
             if (viewById != null) {
                 viewById.setText(charSequence);
-                return true;
             }
         }
-        return false;
+        return this;
     }
 
     /**
@@ -318,15 +314,14 @@ public class AlphaStateLayout extends FrameLayout {
      * @param id
      * @return
      */
-    public boolean setErrorImage(@DrawableRes int id) {
+    public AlphaStateLayout setErrorImage(@DrawableRes int id) {
         if (mEmptyView != null) {
             ImageView viewById = mEmptyView.findViewById(R.id.alpha_error_view_iv);
             if (viewById != null) {
                 viewById.setImageResource(id);
-                return true;
             }
         }
-        return false;
+        return this;
     }
 
     /**
@@ -335,15 +330,14 @@ public class AlphaStateLayout extends FrameLayout {
      * @param l
      * @return
      */
-    public boolean setErrorRetryListener(@Nullable OnClickListener l) {
+    public AlphaStateLayout setErrorRetryListener(@Nullable OnClickListener l) {
         if (mEmptyView != null) {
             TextView viewById = mEmptyView.findViewById(R.id.alpha_error_view_retry_tv);
             if (viewById != null) {
                 viewById.setOnClickListener(l);
-                return true;
             }
         }
-        return false;
+        return this;
     }
 
     /**
