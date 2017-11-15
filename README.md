@@ -5,6 +5,23 @@
 
 ![image](https://github.com/icourt-android/alpha-loading/raw/master/snapshot/loading.gif)
 
+gradle import:
+
+根项目build.gradle引入
+```
+repositories {
+    maven {
+         url 'https://jitpack.io'
+    }
+}
+```
+目标项目build.gradle引入
+```
+dependencies {
+    compile 'com.github.icourt-android:alpha-loading:0.9'
+}
+```
+
 AlphaLoading: loading对话框，可以设置自定义加载动画，失败成功图标，以及提示消息  
 
 Usage:
