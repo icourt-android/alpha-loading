@@ -5,14 +5,18 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -238,6 +242,108 @@ public class AlphaStateLayout extends FrameLayout {
                 mListener.onStateChanged(mViewState);
             }
         }
+    }
+
+    /**
+     * R.id.alpha_empty_view_tv
+     *
+     * @param id
+     * @return
+     */
+    public boolean setEmptyText(@StringRes int id) {
+        if (mEmptyView != null) {
+            TextView viewById = mEmptyView.findViewById(R.id.alpha_empty_view_tv);
+            if (viewById != null) {
+                viewById.setText(id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * R.id.alpha_empty_view_tv
+     *
+     * @param id
+     * @return
+     */
+    public boolean setEmptyText(@StringRes int id, Object... formatArgs) {
+        if (mEmptyView != null) {
+            TextView viewById = mEmptyView.findViewById(R.id.alpha_empty_view_tv);
+            if (viewById != null) {
+                viewById.setText(getContext().getString(id, formatArgs));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * R.id.alpha_empty_view_iv
+     *
+     * @param id
+     * @return
+     */
+    public boolean setEmptyImage(@DrawableRes int id) {
+        if (mEmptyView != null) {
+            ImageView viewById = mEmptyView.findViewById(R.id.alpha_empty_view_iv);
+            if (viewById != null) {
+                viewById.setImageResource(id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * R.id.alpha_error_view_tv
+     *
+     * @param charSequence
+     * @return
+     */
+    public boolean setErrorText(CharSequence charSequence) {
+        if (mEmptyView != null) {
+            TextView viewById = mEmptyView.findViewById(R.id.alpha_error_view_tv);
+            if (viewById != null) {
+                viewById.setText(charSequence);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * R.id.alpha_error_view_iv
+     *
+     * @param id
+     * @return
+     */
+    public boolean setErrorImage(@DrawableRes int id) {
+        if (mEmptyView != null) {
+            ImageView viewById = mEmptyView.findViewById(R.id.alpha_error_view_iv);
+            if (viewById != null) {
+                viewById.setImageResource(id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * aR.id.alpha_error_view_retry_tv
+     *
+     * @param l
+     * @return
+     */
+    public boolean setErrorRetryListener(@Nullable OnClickListener l) {
+        if (mEmptyView != null) {
+            TextView viewById = mEmptyView.findViewById(R.id.alpha_error_view_retry_tv);
+            if (viewById != null) {
+                viewById.setOnClickListener(l);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
