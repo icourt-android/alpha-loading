@@ -26,9 +26,9 @@ public class NestFrameLayout extends FrameLayout implements NestedScrollingChild
         return mChildHelper;
     }
 
-    private void init() {
-        setNestedScrollingEnabled(true);
+    private void init() {;
         mChildHelper = new NestedScrollingChildHelper(this);
+        setNestedScrollingEnabled(true);
     }
 
     public NestFrameLayout(@NonNull Context context) {
