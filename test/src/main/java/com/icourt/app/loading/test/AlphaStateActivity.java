@@ -10,6 +10,11 @@ import android.widget.ListView;
 
 import com.icourt.loading.AlphaStateLayout;
 
+import static com.icourt.loading.ViewState.VIEW_STATE_CONTENT;
+import static com.icourt.loading.ViewState.VIEW_STATE_EMPTY;
+import static com.icourt.loading.ViewState.VIEW_STATE_ERROR;
+import static com.icourt.loading.ViewState.VIEW_STATE_LOADING;
+
 /**
  * @author youxuan  E-mail:xuanyouwu@163.com
  * @version 2.2.1
@@ -48,16 +53,16 @@ public class AlphaStateActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.error:
-                mAlphaStateLayout.setViewState(AlphaStateLayout.VIEW_STATE_ERROR);
+                mAlphaStateLayout.setViewState(VIEW_STATE_ERROR);
                 return true;
             case R.id.empty:
-                mAlphaStateLayout.setViewState(AlphaStateLayout.VIEW_STATE_EMPTY);
+                mAlphaStateLayout.setViewState(VIEW_STATE_EMPTY);
                 return true;
             case R.id.content:
-                mAlphaStateLayout.setViewState(AlphaStateLayout.VIEW_STATE_CONTENT);
+                mAlphaStateLayout.setViewState(VIEW_STATE_CONTENT);
                 return true;
             case R.id.loading:
-                mAlphaStateLayout.setViewState(AlphaStateLayout.VIEW_STATE_LOADING);
+                mAlphaStateLayout.setViewState(VIEW_STATE_LOADING);
                 return true;
             default:
                 break;

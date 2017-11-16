@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -18,8 +17,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import static com.icourt.loading.ViewState.VIEW_STATE_CONTENT;
+import static com.icourt.loading.ViewState.VIEW_STATE_EMPTY;
+import static com.icourt.loading.ViewState.VIEW_STATE_ERROR;
+import static com.icourt.loading.ViewState.VIEW_STATE_LOADING;
+import static com.icourt.loading.ViewState.VIEW_STATE_UNKNOWN;
 
 /**
  * @author youxuan  E-mail:xuanyouwu@163.com
@@ -30,24 +32,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class AlphaStateLayout extends FrameLayout {
 
-    public static final int VIEW_STATE_UNKNOWN = -1;//未知
-
-    public static final int VIEW_STATE_CONTENT = 0;//内容
-
-    public static final int VIEW_STATE_ERROR = 1;//错误
-
-    public static final int VIEW_STATE_EMPTY = 2;//内容为空
-
-    public static final int VIEW_STATE_LOADING = 3;//加载中..
-
-    @Retention(RetentionPolicy.CLASS)
-    @IntDef({VIEW_STATE_UNKNOWN,
-            VIEW_STATE_CONTENT,
-            VIEW_STATE_ERROR,
-            VIEW_STATE_EMPTY,
-            VIEW_STATE_LOADING})
-    public @interface ViewState {
-    }
 
     private LayoutInflater mInflater;
 
@@ -64,8 +48,7 @@ public class AlphaStateLayout extends FrameLayout {
     @Nullable
     private StateListener mListener;
 
-    @ViewState
-    private int mViewState = VIEW_STATE_UNKNOWN;
+    private ViewState mViewState = VIEW_STATE_UNKNOWN;
 
     public AlphaStateLayout(Context context) {
         this(context, null);
@@ -103,27 +86,22 @@ public class AlphaStateLayout extends FrameLayout {
             addView(mErrorView, mErrorView.getLayoutParams());
         }
 
-        int viewState = a.getInt(R.styleable.AlphaStateView_asv_viewState, VIEW_STATE_CONTENT);
+        int viewState = a.getInt(R.styleable.AlphaStateView_asv_viewState, 0);
         mAnimateViewChanges = a.getBoolean(R.styleable.AlphaStateView_asv_animateViewChanges, false);
 
         switch (viewState) {
-            case VIEW_STATE_CONTENT:
+            case 0:
                 mViewState = VIEW_STATE_CONTENT;
                 break;
-
-            case VIEW_STATE_ERROR:
+            case 1:
                 mViewState = VIEW_STATE_ERROR;
                 break;
-
-            case VIEW_STATE_EMPTY:
+            case 2:
                 mViewState = VIEW_STATE_EMPTY;
                 break;
-
-            case VIEW_STATE_LOADING:
+            case 3:
                 mViewState = VIEW_STATE_LOADING;
                 break;
-
-            case VIEW_STATE_UNKNOWN:
             default:
                 mViewState = VIEW_STATE_UNKNOWN;
                 break;
@@ -209,7 +187,7 @@ public class AlphaStateLayout extends FrameLayout {
      * @return
      */
     @Nullable
-    public View getView(@ViewState int state) {
+    public View getView(ViewState state) {
         switch (state) {
             case VIEW_STATE_LOADING:
                 return mLoadingView;
@@ -228,14 +206,13 @@ public class AlphaStateLayout extends FrameLayout {
         }
     }
 
-    @ViewState
-    public int getViewState() {
+    public ViewState getViewState() {
         return mViewState;
     }
 
-    public void setViewState(@ViewState int state) {
+    public void setViewState(ViewState state) {
         if (state != mViewState) {
-            int previous = mViewState;
+            ViewState previous = mViewState;
             mViewState = state;
             setView(previous);
             if (mListener != null) {
@@ -343,7 +320,7 @@ public class AlphaStateLayout extends FrameLayout {
     /**
      * @param previousState
      */
-    private void setView(@ViewState int previousState) {
+    private void setView(ViewState previousState) {
         switch (mViewState) {
             case VIEW_STATE_LOADING:
                 if (mLoadingView == null) {
@@ -459,7 +436,7 @@ public class AlphaStateLayout extends FrameLayout {
      * @param state
      * @param switchToState
      */
-    public void setViewForState(View view, @ViewState int state, boolean switchToState) {
+    public void setViewForState(View view, ViewState  state, boolean switchToState) {
         switch (state) {
             case VIEW_STATE_LOADING:
                 if (mLoadingView != null) {
@@ -508,11 +485,11 @@ public class AlphaStateLayout extends FrameLayout {
      * @param view
      * @param state
      */
-    public void setViewForState(View view, @ViewState int state) {
+    public void setViewForState(View view, ViewState  state) {
         setViewForState(view, state, false);
     }
 
-    public void setViewForState(@LayoutRes int layoutRes, @ViewState int state, boolean switchToState) {
+    public void setViewForState(@LayoutRes int layoutRes, ViewState state, boolean switchToState) {
         if (mInflater == null) {
             mInflater = LayoutInflater.from(getContext());
         }
@@ -520,7 +497,7 @@ public class AlphaStateLayout extends FrameLayout {
         setViewForState(view, state, switchToState);
     }
 
-    public void setViewForState(@LayoutRes int layoutRes, @ViewState int state) {
+    public void setViewForState(@LayoutRes int layoutRes, ViewState  state) {
         setViewForState(layoutRes, state, false);
     }
 
@@ -567,6 +544,6 @@ public class AlphaStateLayout extends FrameLayout {
          *
          * @param viewState
          */
-        void onStateChanged(@ViewState int viewState);
+        void onStateChanged(ViewState viewState);
     }
 }
