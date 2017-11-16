@@ -40,7 +40,7 @@ public class AlphaStateLayout extends FrameLayout {
 
     public static final int VIEW_STATE_LOADING = 3;//加载中..
 
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(RetentionPolicy.CLASS)
     @IntDef({VIEW_STATE_UNKNOWN,
             VIEW_STATE_CONTENT,
             VIEW_STATE_ERROR,
