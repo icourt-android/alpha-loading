@@ -21,23 +21,22 @@ public class NestFrameLayout extends FrameLayout implements NestedScrollingChild
 
     public NestedScrollingChildHelper getmChildHelper() {
         if (mChildHelper == null) {
-            mChildHelper = new NestedScrollingChildHelper(this);
+            init();
         }
         return mChildHelper;
     }
 
     private void init() {
+        setNestedScrollingEnabled(true);
         mChildHelper = new NestedScrollingChildHelper(this);
     }
 
     public NestFrameLayout(@NonNull Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public NestFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     public NestFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
