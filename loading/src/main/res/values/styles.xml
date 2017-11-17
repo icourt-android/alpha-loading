@@ -17,7 +17,7 @@
         <item name="asv_emptyView">@layout/alpha_empty_view</item>
         <item name="asv_loadingView">@layout/alpha_loading_view</item>
         <item name="asv_viewState">content</item>
-        <item name="asv_animateViewChanges">true</item>
+        <item name="asv_animateViewChanges">false</item>
     </style>
 
     <!-- alpha空布局简单样式 -->
