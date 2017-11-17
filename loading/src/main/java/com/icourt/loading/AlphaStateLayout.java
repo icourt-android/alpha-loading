@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.CheckResult;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -187,6 +188,7 @@ public class AlphaStateLayout extends FrameLayout {
      * @return
      */
     @Nullable
+    @CheckResult
     public View getView(ViewState state) {
         switch (state) {
             case VIEW_STATE_LOADING:
@@ -521,7 +523,10 @@ public class AlphaStateLayout extends FrameLayout {
 
     private void animateLayoutChange(@Nullable final View previousView) {
         if (previousView == null) {
-            getView(mViewState).setVisibility(View.VISIBLE);
+            View view = getView(mViewState);
+            if (view != null) {
+                view.setVisibility(View.VISIBLE);
+            }
             return;
         }
 
@@ -530,9 +535,14 @@ public class AlphaStateLayout extends FrameLayout {
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                previousView.setVisibility(View.GONE);
-                getView(mViewState).setVisibility(View.VISIBLE);
-                ObjectAnimator.ofFloat(getView(mViewState), "alpha", 0.0f, 1.0f).setDuration(250L).start();
+                if (previousView != null) {
+                    previousView.setVisibility(View.GONE);
+                }
+                View view = getView(mViewState);
+                if (view != null) {
+                    view.setVisibility(View.VISIBLE);
+                    ObjectAnimator.ofFloat(view, "alpha", 0.0f, 1.0f).setDuration(250L).start();
+                }
             }
         });
         anim.start();
