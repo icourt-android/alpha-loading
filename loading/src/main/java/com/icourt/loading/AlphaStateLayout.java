@@ -276,8 +276,8 @@ public class AlphaStateLayout extends FrameLayout {
      * @return
      */
     public AlphaStateLayout setErrorText(CharSequence charSequence) {
-        if (mEmptyView != null) {
-            TextView viewById = mEmptyView.findViewById(R.id.alpha_error_view_tv);
+        if (mErrorView != null) {
+            TextView viewById = mErrorView.findViewById(R.id.alpha_error_view_tv);
             if (viewById != null) {
                 viewById.setText(charSequence);
             }
@@ -292,8 +292,8 @@ public class AlphaStateLayout extends FrameLayout {
      * @return
      */
     public AlphaStateLayout setErrorImage(@DrawableRes int id) {
-        if (mEmptyView != null) {
-            ImageView viewById = mEmptyView.findViewById(R.id.alpha_error_view_iv);
+        if (mErrorView != null) {
+            ImageView viewById = mErrorView.findViewById(R.id.alpha_error_view_iv);
             if (viewById != null) {
                 viewById.setImageResource(id);
             }
@@ -308,8 +308,8 @@ public class AlphaStateLayout extends FrameLayout {
      * @return
      */
     public AlphaStateLayout setErrorRetryListener(@Nullable OnClickListener l) {
-        if (mEmptyView != null) {
-            TextView viewById = mEmptyView.findViewById(R.id.alpha_error_view_retry_tv);
+        if (mErrorView != null) {
+            TextView viewById = mErrorView.findViewById(R.id.alpha_error_view_retry_tv);
             if (viewById != null) {
                 viewById.setOnClickListener(l);
             }
@@ -436,7 +436,7 @@ public class AlphaStateLayout extends FrameLayout {
      * @param state
      * @param switchToState
      */
-    public void setViewForState(View view, ViewState  state, boolean switchToState) {
+    public void setViewForState(View view, ViewState state, boolean switchToState) {
         switch (state) {
             case VIEW_STATE_LOADING:
                 if (mLoadingView != null) {
@@ -485,7 +485,7 @@ public class AlphaStateLayout extends FrameLayout {
      * @param view
      * @param state
      */
-    public void setViewForState(View view, ViewState  state) {
+    public void setViewForState(View view, ViewState state) {
         setViewForState(view, state, false);
     }
 
@@ -497,7 +497,7 @@ public class AlphaStateLayout extends FrameLayout {
         setViewForState(view, state, switchToState);
     }
 
-    public void setViewForState(@LayoutRes int layoutRes, ViewState  state) {
+    public void setViewForState(@LayoutRes int layoutRes, ViewState state) {
         setViewForState(layoutRes, state, false);
     }
 

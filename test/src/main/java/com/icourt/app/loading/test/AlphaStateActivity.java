@@ -5,8 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.icourt.loading.AlphaStateLayout;
 
@@ -36,6 +38,12 @@ public class AlphaStateActivity extends AppCompatActivity {
     private void initView() {
         mList = (ListView) findViewById(R.id.list);
         mAlphaStateLayout = (AlphaStateLayout) findViewById(R.id.alphaStateLayout);
+        mAlphaStateLayout.setErrorRetryListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "xxx", Toast.LENGTH_SHORT).show();
+            }
+        });
         String[] data = new String[100];
         for (int i = 0; i < 100; i++) {
             data[i] = "Row " + i;

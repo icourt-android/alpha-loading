@@ -22,7 +22,7 @@ allprojects {
 ```
 dependencies {
     ...
-    compile 'com.github.icourt-android:alpha-loading:1.1.1'
+    compile 'com.github.icourt-android:alpha-loading:1.1.6'
 }
 ```
 
