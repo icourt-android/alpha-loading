@@ -131,4 +131,27 @@ public class AlphaLoadingView extends AppCompatImageView {
         checkUpdatedForNewDrawable();
     }
 
+    /**
+     * show 展示loading
+     */
+    public void show() {
+        setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 停止消失
+     */
+    public void dismiss() {
+        setVisibility(View.GONE);
+    }
+
+    /**
+     * 是否展示loading中
+     *
+     * @return
+     */
+    public boolean isShow() {
+        return getVisibility() == VISIBLE;
+    }
+
 }
