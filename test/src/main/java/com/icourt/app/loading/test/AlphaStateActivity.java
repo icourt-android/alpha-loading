@@ -3,11 +3,13 @@ package com.icourt.app.loading.test;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.icourt.loading.AlphaStateLayout;
@@ -28,6 +30,8 @@ public class AlphaStateActivity extends AppCompatActivity {
     private ListView mList;
     private AlphaStateLayout mAlphaStateLayout;
 
+    RadioGroup radioGroup;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,7 @@ public class AlphaStateActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
         mList = (ListView) findViewById(R.id.list);
         mAlphaStateLayout = (AlphaStateLayout) findViewById(R.id.alphaStateLayout);
         mAlphaStateLayout.setErrorRetryListener(new View.OnClickListener() {
@@ -49,6 +54,14 @@ public class AlphaStateActivity extends AppCompatActivity {
             data[i] = "Row " + i;
         }
         mList.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, data));
+        radioGroup = findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                mAlphaStateLayout.setContentLoadingCoexist(checkedId == R.id.radio0);
+                mAlphaStateLayout.setContentEmptyCoexist(checkedId == R.id.radio1);
+            }
+        });
     }
 
     @Override
@@ -59,6 +72,10 @@ public class AlphaStateActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        for (int i = 0; i < mAlphaStateLayout.getChildCount(); i++) {
+            View childAt = mAlphaStateLayout.getChildAt(i);
+            Log.d("------------>child:", "" + i + " c:" + childAt);
+        }
         switch (item.getItemId()) {
             case R.id.error:
                 mAlphaStateLayout.setViewState(VIEW_STATE_ERROR);

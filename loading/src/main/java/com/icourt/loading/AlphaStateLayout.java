@@ -50,15 +50,19 @@ public class AlphaStateLayout extends FrameLayout {
     private StateListener mListener;
 
     private ViewState mViewState = VIEW_STATE_UNKNOWN;
+    int loadingViewResId;
+    int emptyViewResId;
+    int errorViewResId;
+    boolean contentLoadingCoexist, contentEmptyCoexist;
 
     public AlphaStateLayout(Context context) {
         this(context, null);
     }
 
     public AlphaStateLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(attrs);
+        this(context, attrs, 0);
     }
+
 
     public AlphaStateLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -68,28 +72,11 @@ public class AlphaStateLayout extends FrameLayout {
     private void init(AttributeSet attrs) {
         mInflater = LayoutInflater.from(getContext());
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.AlphaStateView);
-
-        int loadingViewResId = a.getResourceId(R.styleable.AlphaStateView_asv_loadingView, -1);
-        if (loadingViewResId > -1) {
-            mLoadingView = mInflater.inflate(loadingViewResId, this, false);
-            addView(mLoadingView, mLoadingView.getLayoutParams());
-        }
-
-        int emptyViewResId = a.getResourceId(R.styleable.AlphaStateView_asv_emptyView, -1);
-        if (emptyViewResId > -1) {
-            mEmptyView = mInflater.inflate(emptyViewResId, this, false);
-            addView(mEmptyView, mEmptyView.getLayoutParams());
-        }
-
-        int errorViewResId = a.getResourceId(R.styleable.AlphaStateView_asv_errorView, -1);
-        if (errorViewResId > -1) {
-            mErrorView = mInflater.inflate(errorViewResId, this, false);
-            addView(mErrorView, mErrorView.getLayoutParams());
-        }
-
+        loadingViewResId = a.getResourceId(R.styleable.AlphaStateView_asv_loadingView, -1);
+        emptyViewResId = a.getResourceId(R.styleable.AlphaStateView_asv_emptyView, -1);
+        errorViewResId = a.getResourceId(R.styleable.AlphaStateView_asv_errorView, -1);
         int viewState = a.getInt(R.styleable.AlphaStateView_asv_viewState, 0);
         mAnimateViewChanges = a.getBoolean(R.styleable.AlphaStateView_asv_animateViewChanges, false);
-
         switch (viewState) {
             case 0:
                 mViewState = VIEW_STATE_CONTENT;
@@ -107,8 +94,32 @@ public class AlphaStateLayout extends FrameLayout {
                 mViewState = VIEW_STATE_UNKNOWN;
                 break;
         }
-
+        contentEmptyCoexist = a.getBoolean(R.styleable.AlphaStateView_asv_contentEmptyCoexist, false);
+        contentLoadingCoexist = a.getBoolean(R.styleable.AlphaStateView_asv_contentLoadingCoexist, false);
         a.recycle();
+    }
+
+    private void addStateChild() {
+        if (loadingViewResId > -1 && mLoadingView == null) {
+            mLoadingView = mInflater.inflate(loadingViewResId, this, false);
+            addView(mLoadingView, mLoadingView.getLayoutParams());
+        }
+
+        if (emptyViewResId > -1 && mEmptyView == null) {
+            mEmptyView = mInflater.inflate(emptyViewResId, this, false);
+            addView(mEmptyView, mEmptyView.getLayoutParams());
+        }
+
+        if (errorViewResId > -1 && mErrorView == null) {
+            mErrorView = mInflater.inflate(errorViewResId, this, false);
+            addView(mErrorView, mErrorView.getLayoutParams());
+        }
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        addStateChild();
     }
 
     @Override
@@ -224,6 +235,13 @@ public class AlphaStateLayout extends FrameLayout {
     }
 
     /**
+     * 展示loading布局
+     */
+    public void showLoadingView() {
+        setViewState(VIEW_STATE_LOADING);
+    }
+
+    /**
      * R.id.alpha_empty_view_tv
      *
      * @param id
@@ -320,6 +338,36 @@ public class AlphaStateLayout extends FrameLayout {
     }
 
     /**
+     * 设置内容布局与loading布局共存
+     *
+     * @param contentLoadingCoexist
+     */
+    public void setContentLoadingCoexist(boolean contentLoadingCoexist) {
+        if (this.contentLoadingCoexist != contentLoadingCoexist) {
+            this.contentLoadingCoexist = contentLoadingCoexist;
+            if (getViewState() == VIEW_STATE_LOADING && mContentView != null) {
+                mContentView.setVisibility(contentLoadingCoexist ? VISIBLE : GONE);
+            }
+        }
+
+    }
+
+    /**
+     * 设置内容布局与empty布局共存
+     *
+     * @param contentEmptyCoexist
+     */
+    public void setContentEmptyCoexist(boolean contentEmptyCoexist) {
+        if (this.contentEmptyCoexist != contentEmptyCoexist) {
+            this.contentEmptyCoexist = contentEmptyCoexist;
+            if (getViewState() == VIEW_STATE_EMPTY && mContentView != null) {
+                mContentView.setVisibility(contentEmptyCoexist ? VISIBLE : GONE);
+            }
+        }
+    }
+
+
+    /**
      * @param previousState
      */
     private void setView(ViewState previousState) {
@@ -329,7 +377,7 @@ public class AlphaStateLayout extends FrameLayout {
                     return;
                 }
 
-                if (mContentView != null) {
+                if (mContentView != null && !contentLoadingCoexist) {
                     mContentView.setVisibility(View.GONE);
                 }
                 if (mErrorView != null) {
@@ -350,15 +398,13 @@ public class AlphaStateLayout extends FrameLayout {
                 if (mEmptyView == null) {
                     return;
                 }
-
-
                 if (mLoadingView != null) {
                     mLoadingView.setVisibility(View.GONE);
                 }
                 if (mErrorView != null) {
                     mErrorView.setVisibility(View.GONE);
                 }
-                if (mContentView != null) {
+                if (mContentView != null && !contentEmptyCoexist) {
                     mContentView.setVisibility(View.GONE);
                 }
 
@@ -373,8 +419,6 @@ public class AlphaStateLayout extends FrameLayout {
                 if (mErrorView == null) {
                     return;
                 }
-
-
                 if (mLoadingView != null) {
                     mLoadingView.setVisibility(View.GONE);
                 }
@@ -391,7 +435,6 @@ public class AlphaStateLayout extends FrameLayout {
                     mErrorView.setVisibility(View.VISIBLE);
                 }
                 break;
-
             case VIEW_STATE_CONTENT:
             default:
                 if (mContentView == null) {

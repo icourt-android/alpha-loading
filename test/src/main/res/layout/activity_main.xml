@@ -23,5 +23,14 @@
         android:onClick="onClickLoadingView"
         android:layout_gravity="center"
         android:src="@drawable/alpha_loading"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="80dp"
+        android:background="#c3c3c3"
+        android:onClick="onClick3"
+        android:padding="15dp"
+        android:text="statelayout"/>
 
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.icourt.app.loading.test;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -93,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
     private AlphaLoading alphaLoading;
     private Handler handler;
+
+
+    public void onClick3(View view) {
+        Intent intent = new Intent(this, AlphaStateActivity.class);
+        startActivity(intent);
+    }
 
     public void onClick2(View view) {
         if (alphaLoading == null) {

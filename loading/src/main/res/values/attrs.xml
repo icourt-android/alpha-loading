@@ -12,6 +12,8 @@
             <enum name="loading" value="3" />
         </attr>
         <attr name="asv_animateViewChanges" format="boolean" />
+        <attr name="asv_contentLoadingCoexist" format="boolean" />  <!-- 内容布局与loading布局是否能共存 -->
+        <attr name="asv_contentEmptyCoexist" format="boolean" />     <!-- 内容布局与empty布局是否能共存 -->
     </declare-styleable>
 
 </resources>
