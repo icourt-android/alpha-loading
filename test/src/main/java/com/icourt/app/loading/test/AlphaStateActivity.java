@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -46,7 +47,7 @@ public class AlphaStateActivity extends AppCompatActivity {
         mAlphaStateLayout.setErrorRetryListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "xxx", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "rety", Toast.LENGTH_SHORT).show();
             }
         });
         String[] data = new String[100];
@@ -60,6 +61,12 @@ public class AlphaStateActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 mAlphaStateLayout.setContentLoadingCoexist(checkedId == R.id.radio0);
                 mAlphaStateLayout.setContentEmptyCoexist(checkedId == R.id.radio1);
+            }
+        });
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(AlphaStateActivity.this,"xxx"+System.currentTimeMillis(),Toast.LENGTH_SHORT).show();
             }
         });
     }
