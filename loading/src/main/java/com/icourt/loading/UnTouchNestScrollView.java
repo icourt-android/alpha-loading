@@ -27,6 +27,7 @@ public class UnTouchNestScrollView extends NestedScrollView {
 
     @Override
     public final boolean onTouchEvent(MotionEvent ev) {
+        super.onTouchEvent(ev);
         return false;
     }
 }
