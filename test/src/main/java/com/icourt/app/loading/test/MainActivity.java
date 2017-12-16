@@ -137,4 +137,8 @@ public class MainActivity extends AppCompatActivity {
         }
         flag = !flag;
     }
+
+    public void onClick4(View view) {
+        startActivity(new Intent(this, DetailActivity.class));
+    }
 }

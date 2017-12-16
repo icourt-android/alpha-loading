@@ -48,6 +48,7 @@ public class AlphaLoading {
     private final Dialog mDialog;
     private final ImageView mIconView;
     private final TextView mMsgView;
+    private final DialogInterface.OnDismissListener dismissListener;
     private Handler mHandler;
     @State
     private int mState;
@@ -108,7 +109,7 @@ public class AlphaLoading {
                 release();
             }
         });
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        dialog.setOnDismissListener(dismissListener = new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 release();
@@ -165,10 +166,8 @@ public class AlphaLoading {
      */
     public void dismissImmediately() {
         if (mState == STATE_LOADING) {
-
             mDialog.dismiss();
             release();
-            stopLoadingAnimation();
         }
     }
 
@@ -185,7 +184,19 @@ public class AlphaLoading {
         dismissWithResult(failMsg, mFailDrawableRes);
     }
 
+    public void dismissOk(String okMsg, Runnable endAction) {
+        dismissWithResult(okMsg, mOkDrawableRes, endAction);
+    }
+
+    public void dismissFail(String failMsg, Runnable endAction) {
+        dismissWithResult(failMsg, mFailDrawableRes, endAction);
+    }
+
     public void dismissWithResult(String msg, @DrawableRes final int resultIconRes) {
+        dismissWithResult(msg, resultIconRes, null);
+    }
+
+    public void dismissWithResult(String msg, @DrawableRes final int resultIconRes, final Runnable endAction) {
         if (mState == STATE_LOADING) {
             mState = STATE_RESULTING;
             setMessage(msg);
@@ -201,8 +212,28 @@ public class AlphaLoading {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mDialog.dismiss();
-                        release();
+                        if (endAction == null) {
+                            try {
+                                mDialog.dismiss();
+                            } catch (Throwable ignored) {
+                            }
+                        } else {
+                            try {
+                                mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        try {
+                                            mDialog.setOnDismissListener(dismissListener);
+                                        } finally {
+                                            release();
+                                        }
+                                        endAction.run();
+                                    }
+                                });
+                                mDialog.dismiss();
+                            } catch (Throwable ignored) {
+                            }
+                        }
                     }
                 }, 200 + mResultDuration);
             }
@@ -243,6 +274,18 @@ public class AlphaLoading {
             mIconView.animate().cancel();
         }
         mState = STATE_FREE;
+    }
+
+    /**
+     * 安全dismiss，会导致endAction不回掉，动画提前结束
+     * <p>
+     * 适合用在dialog附带的activity/fragment销毁的时候调用
+     */
+    public void dismissImmediatelyLossState() {
+        if (mState == STATE_LOADING) {
+            mDialog.dismiss();
+        }
+        release();
     }
 
     @State
@@ -331,7 +374,7 @@ public class AlphaLoading {
 
 
     @IntDef({STATE_FREE, STATE_LOADING, STATE_RESULTING})
-    @Retention(RetentionPolicy.SOURCE)
+    @Retention(RetentionPolicy.CLASS)
     public @interface State {
     }
 

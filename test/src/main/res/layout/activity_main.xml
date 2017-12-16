@@ -33,4 +33,14 @@
         android:padding="15dp"
         android:text="statelayout"/>
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:background="#c3c3c3"
+        android:onClick="onClick4"
+        android:padding="15dp"
+        android:text="goDetail"/>
+
 </FrameLayout>

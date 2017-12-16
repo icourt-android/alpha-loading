@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.icourt.loading.AlphaLoading;
 
@@ -16,6 +17,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
     }
+
+
 
     public void onClick(View view) {
         final AlphaLoading alphaLoading = new AlphaLoading.Builder(this)
@@ -62,5 +65,114 @@ public class DetailActivity extends AppCompatActivity {
 //                alphaLoading.dismissImmediately();
 //            }
 //        }, 2800);    // 800 2800
+    }
+
+
+    AlphaLoading alphaLoading;
+
+    private void makeLoading() {
+        if (alphaLoading != null) {
+            return;
+        }
+        alphaLoading = new AlphaLoading.Builder(this)
+                .message("我在加载...")
+                .cancelable(true)
+                .resultDuration(3000)
+                .create();
+    }
+
+    public void onClick2(View view) {
+        makeLoading();
+
+        alphaLoading.show();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alphaLoading.dismissWithResult("OK", R.drawable.alpha_ic_ok, new Runnable() {
+                    @Override
+                    public void run() {
+                        int nextInt = new Random().nextInt(10000);
+                        Toast.makeText(DetailActivity.this, "" + nextInt, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }, 1000);
+
+    }
+
+    public void onClick3(View view) {
+        makeLoading();
+
+        alphaLoading.setMessage("ddd");
+        alphaLoading.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String msg = "dasdadasdasdsadsadasdasdsadasdasdsadasdasdasdasdasdsadsasadasdasdsaddsdasdasdasdsaddasdsadasdasdasdasdasdsad";
+                alphaLoading.dismissOk(msg, new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DetailActivity.this, "toast", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 1000);
+    }
+
+    public void onClick4(View view) {
+        makeLoading();
+
+        alphaLoading.setMessage("onClick4");
+        alphaLoading.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 1000);
+    }
+
+    public void onClick5(View view) {
+
+        makeLoading();
+
+        alphaLoading.setMessage("onClick4");
+        alphaLoading.show();
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alphaLoading.dismissImmediately();
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 2000);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (alphaLoading != null) {
+            alphaLoading.dismissImmediatelyLossState();
+        }
     }
 }
