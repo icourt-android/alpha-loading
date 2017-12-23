@@ -43,4 +43,13 @@
         android:padding="15dp"
         android:text="goDetail"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:background="#c3c3c3"
+        android:onClick="onClick5"
+        android:padding="15dp"
+        android:text="onClick5"/>
+
 </FrameLayout>

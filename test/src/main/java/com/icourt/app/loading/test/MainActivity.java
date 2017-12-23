@@ -141,4 +141,8 @@ public class MainActivity extends AppCompatActivity {
     public void onClick4(View view) {
         startActivity(new Intent(this, DetailActivity.class));
     }
+
+    public void onClick5(View view) {
+        startActivity(new Intent(this, TestActivity.class));
+    }
 }

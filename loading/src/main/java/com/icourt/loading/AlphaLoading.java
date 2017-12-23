@@ -38,6 +38,7 @@ public class AlphaLoading {
     public static final int STATE_FREE = 0;
     public static final int STATE_LOADING = 1;
     public static final int STATE_RESULTING = 2;
+    public static final int STATE_DISMISSING = 3;
 
     private static int sDefaultLoadingDrawable = R.drawable.alpha_loading;
     private static int sDefaultOkIcon = R.drawable.alpha_ic_ok;
@@ -48,7 +49,7 @@ public class AlphaLoading {
     private final Dialog mDialog;
     private final ImageView mIconView;
     private final TextView mMsgView;
-    private final DialogInterface.OnDismissListener dismissListener;
+    private final DialogInterface.OnDismissListener mDismissListener;
     private Handler mHandler;
     @State
     private int mState;
@@ -59,6 +60,7 @@ public class AlphaLoading {
     @DrawableRes
     private final int mFailDrawableRes;
     private final long mResultDuration;
+    private boolean mReshowingWhileDismissing;
 
     public static void setDefaultLoadingDrawable(@DrawableRes int defaultLoadingDrawable) {
         sDefaultLoadingDrawable = defaultLoadingDrawable;
@@ -109,10 +111,14 @@ public class AlphaLoading {
                 release();
             }
         });
-        dialog.setOnDismissListener(dismissListener = new DialogInterface.OnDismissListener() {
+        dialog.setOnDismissListener(mDismissListener = new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 release();
+                if (mReshowingWhileDismissing) {
+                    mReshowingWhileDismissing = false;
+                    show();
+                }
             }
         });
 
@@ -148,7 +154,6 @@ public class AlphaLoading {
      */
     public void show() {
         if (mState == STATE_FREE) {
-
             mState = STATE_LOADING;
 
             mDialog.show();
@@ -158,6 +163,8 @@ public class AlphaLoading {
             if (mHandler == null) {
                 mHandler = new Handler(Looper.getMainLooper());
             }
+        } else if (mState == STATE_DISMISSING && !mReshowingWhileDismissing) {
+            mReshowingWhileDismissing = true;
         }
     }
 
@@ -166,8 +173,8 @@ public class AlphaLoading {
      */
     public void dismissImmediately() {
         if (mState == STATE_LOADING) {
+            mState = STATE_DISMISSING;
             mDialog.dismiss();
-            release();
         }
     }
 
@@ -214,6 +221,7 @@ public class AlphaLoading {
                     public void run() {
                         if (endAction == null) {
                             try {
+                                mState = STATE_DISMISSING;
                                 mDialog.dismiss();
                             } catch (Throwable ignored) {
                             }
@@ -223,13 +231,16 @@ public class AlphaLoading {
                                     @Override
                                     public void onDismiss(DialogInterface dialog) {
                                         try {
-                                            mDialog.setOnDismissListener(dismissListener);
+                                            mDialog.setOnDismissListener(mDismissListener);
                                         } finally {
                                             release();
                                         }
-                                        endAction.run();
+                                        if (endAction != null) {
+                                            endAction.run();
+                                        }
                                     }
                                 });
+                                mState = STATE_DISMISSING;
                                 mDialog.dismiss();
                             } catch (Throwable ignored) {
                             }
@@ -263,6 +274,11 @@ public class AlphaLoading {
             return;
         }
 
+        releaseResource();
+        mState = STATE_FREE;
+    }
+
+    private void releaseResource() {
         if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
@@ -273,7 +289,6 @@ public class AlphaLoading {
         } else if (mState == STATE_RESULTING) {
             mIconView.animate().cancel();
         }
-        mState = STATE_FREE;
     }
 
     /**
@@ -282,10 +297,13 @@ public class AlphaLoading {
      * 适合用在dialog附带的activity/fragment销毁的时候调用
      */
     public void dismissImmediatelyLossState() {
-        if (mState == STATE_LOADING) {
+        if (mState == STATE_LOADING || mState == STATE_RESULTING) {
+            releaseResource();
+            mReshowingWhileDismissing = false;
+            mState = STATE_DISMISSING;
+            mDialog.setOnDismissListener(mDismissListener);
             mDialog.dismiss();
         }
-        release();
     }
 
     @State

@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".DetailActivity"></activity>
         <activity android:name=".AlphaStateActivity"></activity>
+        <activity android:name=".TestActivity"/>
     </application>
 
 </manifest>
