@@ -311,8 +311,13 @@ public class AlphaLoading {
         return mState;
     }
 
-    public boolean isFree() {
-        return STATE_FREE == mState;
+    /**
+     * 只有在free和dismissing状态才能show
+     *
+     * {@link #show()}
+     */
+    public boolean isShowing() {
+        return mState == STATE_LOADING || mState == STATE_RESULTING;
     }
 
     public static class Builder {
