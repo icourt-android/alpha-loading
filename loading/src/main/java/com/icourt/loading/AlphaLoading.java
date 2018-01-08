@@ -174,7 +174,10 @@ public class AlphaLoading {
     public void dismissImmediately() {
         if (mState == STATE_LOADING) {
             mState = STATE_DISMISSING;
-            mDialog.dismiss();
+            try {
+                mDialog.dismiss();
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -302,7 +305,10 @@ public class AlphaLoading {
             mReshowingWhileDismissing = false;
             mState = STATE_DISMISSING;
             mDialog.setOnDismissListener(mDismissListener);
-            mDialog.dismiss();
+            try {
+                mDialog.dismiss();
+            } catch (Exception ignored) {
+            }
         }
     }
 
