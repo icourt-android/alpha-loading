@@ -2,11 +2,13 @@ package com.icourt.loading;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.LayoutTransition;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.DrawableRes;
@@ -15,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -100,10 +103,17 @@ public class AlphaLoading {
         this.mIconView = iconView;
         this.mMsgView = msgView;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            LayoutTransition lt = new LayoutTransition();
+            lt.enableTransitionType(LayoutTransition.CHANGING);
+            ((ViewGroup) dialog.findViewById(R.id.alpha_content_view)).setLayoutTransition(lt);
+        }
+
         setMessage(b.message);
 
+        mLoadingDrawable = b.loadingDrawable;
         try {
-            iconView.setImageResource(mLoadingDrawable = b.loadingDrawable);
+            iconView.setImageResource(mLoadingDrawable);
         } catch (OutOfMemoryError ignored) {
         }
 
@@ -217,6 +227,7 @@ public class AlphaLoading {
         if (mState == STATE_LOADING) {
             mState = STATE_RESULTING;
             setMessage(msg);
+            
             mIconView.animate().alpha(0).setDuration(200).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -329,7 +340,7 @@ public class AlphaLoading {
 
     /**
      * 只有在free和dismissing状态才能show
-     *
+     * <p>
      * {@link #show()}
      */
     public boolean isShowing() {

@@ -110,12 +110,12 @@ public class MainActivity extends AppCompatActivity {
                     .create();
             handler = new Handler();
         }
-        alphaLoading.setMessage("正在压缩");
+//        alphaLoading.setMessage("正在压缩");
         alphaLoading.show();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                alphaLoading.setMessage("正在上传");
+                alphaLoading.setMessage("正在上传文件内容，请稍后");
             }
         }, 1000);
         handler.postDelayed(new Runnable() {
