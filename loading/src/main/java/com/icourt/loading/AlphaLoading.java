@@ -101,7 +101,11 @@ public class AlphaLoading {
         this.mMsgView = msgView;
 
         setMessage(b.message);
-        iconView.setImageResource(mLoadingDrawable = b.loadingDrawable);
+
+        try {
+            iconView.setImageResource(mLoadingDrawable = b.loadingDrawable);
+        } catch (OutOfMemoryError ignored) {
+        }
 
         dialog.setCancelable(b.cancelable);
         dialog.setCanceledOnTouchOutside(b.cancelable);
@@ -157,7 +161,10 @@ public class AlphaLoading {
             mState = STATE_LOADING;
 
             mDialog.show();
-            mIconView.setImageResource(mLoadingDrawable);
+            try {
+                mIconView.setImageResource(mLoadingDrawable);
+            } catch (OutOfMemoryError ignored) {
+            }
             startLoadingAnimation();
 
             if (mHandler == null) {
@@ -214,7 +221,10 @@ public class AlphaLoading {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     stopLoadingAnimation();
-                    mIconView.setImageResource(resultIconRes);
+                    try {
+                        mIconView.setImageResource(resultIconRes);
+                    } catch (OutOfMemoryError ignored) {
+                    }
                     mIconView.animate().alpha(1).setListener(null).start();
                 }
             }).start();
