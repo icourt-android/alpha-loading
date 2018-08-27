@@ -50,6 +50,11 @@ public class AlphaLoading {
     private static long sDefaultResultDuration = 1000;
 
     private final Dialog mDialog;
+
+    public Dialog getmDialog() {
+        return mDialog;
+    }
+
     private final ImageView mIconView;
     private final TextView mMsgView;
     private final DialogInterface.OnDismissListener mDismissListener;
