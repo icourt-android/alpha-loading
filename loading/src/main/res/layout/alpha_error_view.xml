@@ -31,6 +31,7 @@
             android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:gravity="center"
             android:clickable="true"
             android:text="@string/alpha_default_load_error"
             android:textColor="#8c8f92"

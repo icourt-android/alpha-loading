@@ -33,6 +33,7 @@
             android:clickable="true"
             android:ellipsize="end"
             android:maxLines="2"
+            android:gravity="center"
             android:text="@string/alpha_default_no_data"
             android:textColor="#8c8f92"
             android:textSize="16sp" />
